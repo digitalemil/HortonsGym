@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Horton\'s Gym</string>
+    <string name="hello_round">Horton says:\n\'Welcome!\'</string>
+    <string name="hello_square">Horton says:\n\'Welcome!\'</string>
+
+</resources>

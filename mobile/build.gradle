@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
+
+    defaultConfig {
+        applicationId "hortonsgym.digitalemil.de.hortonsgym"
+        minSdkVersion 15
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    wearApp project(':wear')
+    compile 'com.google.android.gms:play-services:+'
+}
+
+dependencies {
+   compile 'com.google.android.gms:play-services:5.0.+@aar'
+   compile 'com.android.support:support-v4:20.0.+'
+   wearApp project(':wear')
+}
