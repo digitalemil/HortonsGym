@@ -163,7 +163,7 @@ function processData() {
 	
 		biz.widgets[i].things[0].setHR(hr);
 		biz.widgets[i].things[0].texts[0].setText(session.users[i].name);
-		biz.widgets[i].things[0].texts[2].setText(session.users[i].zone);
+		biz.widgets[i].things[0].texts[2].setText(session.users[i].name);
 		biz.widgets[i].things[0].texts[8].setText(session.users[i].calories);
 		biz.widgets[i].things[0].texts[5].setText(session.users[i].recovery);
 		
@@ -516,7 +516,7 @@ function Widget(text) {
 
 	it++;
 	this.texts[it] = new Text();
-	this.texts[it].init("Recovery", 92, 48, 0xFF000000);
+	this.texts[it].init("", 92, 48, 0xFF000000);
 	this.texts[it].setFont("bold");
 	this.texts[it].setSize(12);
 	this.texts[it].setAlignment(TEXT_CENTER);
@@ -532,7 +532,7 @@ function Widget(text) {
 
 	it++;
 	this.texts[it] = new Text();
-	this.texts[it].init("Device", -144, -64, 0xFF000000);
+	this.texts[it].init("User", -144, -64, 0xFF000000);
 	this.texts[it].setFont("bold");
 	this.texts[it].setSize(18);
 	this.texts[it].setAlignment(TEXT_LEFT);
@@ -540,7 +540,7 @@ function Widget(text) {
 
 	it++;
 	this.texts[it] = new Text();
-	this.texts[it].init("Calories/h", -60, 48, 0xFF000000);
+	this.texts[it].init("", -60, 48, 0xFF000000);
 	this.texts[it].setFont("bold");
 	this.texts[it].setSize(12);
 	this.texts[it].setAlignment(TEXT_CENTER);
