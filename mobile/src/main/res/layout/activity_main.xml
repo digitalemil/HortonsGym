@@ -75,4 +75,26 @@
         android:layout_below="@+id/editServer"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Offline"
+        android:id="@+id/networkStatus"
+        android:textAlignment="center"
+        android:layout_above="@+id/uploadButton"
+        android:layout_alignRight="@+id/textServer"
+        android:layout_alignEnd="@+id/textServer"
+        android:visibility="invisible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Data"
+        android:id="@+id/uploadButton"
+        android:enabled="false"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
 </RelativeLayout>

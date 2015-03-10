@@ -55,7 +55,7 @@ public class DataLayerListenerService extends WearableListenerService {
             Wearable.MessageApi.sendMessage(googleApiClient, nodeId,
                     DATA_ITEM_RECEIVED_PATH, payload);
 
-            MainActivity.setJSON(MainActivity.payLoadToString(new String(payload)));
+            MainActivity.addDoc(MainActivity.payLoadToString(new String(payload)));
         }
     }
 }

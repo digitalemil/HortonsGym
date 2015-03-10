@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BA20818C-0E0F-472B-8D10-865E5A791951</string>
+	<key>IDESourceControlProjectName</key>
+	<string>HeartRateMonitor</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>392B213B70A310AB410407F6A77C5E24EB1E8F60</key>
+		<string>https://github.com/digitalemil/HortonsGym.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>HeartRateMonitor/HeartRateMonitor.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>392B213B70A310AB410407F6A77C5E24EB1E8F60</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/digitalemil/HortonsGym.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>392B213B70A310AB410407F6A77C5E24EB1E8F60</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>392B213B70A310AB410407F6A77C5E24EB1E8F60</string>
+			<key>IDESourceControlWCCName</key>
+			<string>HortonsGym</string>
+		</dict>
+	</array>
+</dict>
+</plist>

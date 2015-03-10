@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+	  <PMML version="4.1"
+	   xmlns="http://www.dmg.org/PMML-4_1"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	    <Header copyright="Copyright(c) 2002 SAS Institute Inc., Cary, NC, USA. All Rights Reserved.">
+	    <Application name="SAS(r)" version="9.4"/>
+	    <Timestamp>2015-03-03 14:29:27</Timestamp>
+	    </Header>
+	    <DataDictionary numberOfFields="2">
+	      <DataField name="HR" optype="continuous" dataType="double"/>
+	      <DataField name="WidgetColor" optype="categorical" dataType="string"/>
+	    </DataDictionary>
+	    <TransformationDictionary>
+	      <DefineFunction name="SAS-EM-String-Normalize" optype="categorical" dataType="string">
+	        <ParameterField name="FMTWIDTH" optype="continuous"/>
+	        <ParameterField name="AnyCInput" optype="categorical"/>
+	        <Apply function="trimBlanks">
+	          <Apply function="uppercase">
+	            <Apply function="substring">
+	              <FieldRef field="AnyCInput"/>
+	              <Constant>1</Constant>
+	              <Constant>FMTWIDTH</Constant>
+	            </Apply>
+	          </Apply>
+	        </Apply>
+	      </DefineFunction>
+	      <DefineFunction name="SAS-FORMAT-BESTw" optype="categorical" dataType="string">
+	        <ParameterField name="FMTWIDTH" optype="continuous"/>
+	        <ParameterField name="AnyNInput" optype="continuous"/>
+	        <Apply function="formatNumber">
+	          <FieldRef field="AnyNInput"/>
+	          <Constant>FMTWIDTH</Constant>
+	        </Apply>
+	      </DefineFunction>
+	      <DefineFunction name="SAS-FORMAT-$CHARw" optype="categorical" dataType="string">
+	        <ParameterField name="FMTWIDTH" optype="continuous"/>
+	        <ParameterField name="AnyCInput" optype="continuous"/>
+	        <Apply function="substring">
+	          <FieldRef field="AnyCInput"/>
+	          <Constant>1</Constant>
+	          <Constant>FMTWIDTH</Constant>
+	        </Apply>
+	      </DefineFunction>
+	    </TransformationDictionary>
+	    <TreeModel functionName="classification" splitCharacteristic="binarySplit">
+	      <MiningSchema>
+	        <MiningField name="WidgetColor" usageType="predicted" />
+	        <MiningField name="HR" usageType="active" optype="continuous"/>
+	      </MiningSchema>
+	      <Output>
+	        <OutputField name="P_WidgetColor0x80FF0000" displayName="Vorhergesagt: WidgetColor=0x80FF0000" optype="continuous" dataType="double" targetField="WidgetColor" feature="probability" value="0x80FF0000"/>
+	        <OutputField name="P_WidgetColor0x8000FF00" displayName="Vorhergesagt: WidgetColor=0x8000FF00" optype="continuous" dataType="double" targetField="WidgetColor" feature="probability" value="0x8000FF00"/>
+	      </Output>
+	      <Targets>
+	        <Target field="WidgetColor" optype="categorical">
+	          <TargetValue value="0x80FF0000" displayValue="0x80FF0000"/>
+	          <TargetValue value="0x8000FF00" displayValue="0x8000FF00"/>
+	        </Target>
+	      </Targets>
+	      <Node id="1" score="0x80FF0000" recordCount="25">
+	        <True/>
+	        <ScoreDistribution value="0x80FF0000" recordCount="20" confidence="0.8"/>
+	        <ScoreDistribution value="0x8000FF00" recordCount="5" confidence="0.2"/>
+	        <Node id="2" score="0x8000FF00" recordCount="5">
+	          <CompoundPredicate booleanOperator="surrogate">
+	            <SimplePredicate field="HR" operator="lessThan" value="     90"/>
+	            <False/>
+	          </CompoundPredicate>
+	          <ScoreDistribution value="0x80FF0000" recordCount="0" confidence="0"/>
+	          <ScoreDistribution value="0x8000FF00" recordCount="5" confidence="1"/>
+	        </Node>
+	        <Node id="3" score="0x80FF0000" recordCount="20">
+	          <CompoundPredicate booleanOperator="surrogate">
+	            <SimplePredicate field="HR" operator="greaterOrEqual" value="     90"/>
+	            <SimplePredicate field="HR" operator="isMissing"/>
+	          </CompoundPredicate>
+	          <ScoreDistribution value="0x80FF0000" recordCount="20" confidence="1"/>
+	          <ScoreDistribution value="0x8000FF00" recordCount="0" confidence="0"/>
+	        </Node>
+	      </Node>
+	    </TreeModel>
+	  </PMML>
