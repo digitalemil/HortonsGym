@@ -1,0 +1,212 @@
+<html>
+<head>
+<title>Horton's Gym</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport"
+	content="user-scalable=no, width=device-width,  initial-scale=1, minimum-scale=1,  maximum-scale=1" />
+
+<style>
+* {
+	-webkit-user-drag: none;
+	-webkit-touch-callout: none;
+	/* prevent callout to copy image, etc when tap to hold */
+	-webkit-text-size-adjust: none;
+	/* prevent webkit from resizing text to fit */
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	/* make transparent link [ remove highlighting ] selection, adjust last value opacity 0 to 1.0 */
+}
+</style>
+<style>
+canvas {
+	border: 0px solid black;
+}
+</style>
+<style>
+.col2 * {
+	width: 100%;
+}
+
+.input {
+	width: 98%
+}
+
+body {
+	font-size: 100%
+}
+
+body {
+	font-family: Arial;
+}
+
+label {
+	font-size: 100%
+}
+
+label {
+	font-family: Arial;
+}
+
+p {
+	font-size: 100%
+}
+
+p {
+	font-family: Arial;
+}
+
+input {
+	font-size: 100%
+}
+
+input {
+	font-family: Arial;
+}
+</style>
+
+</head>
+<body id="body" bgcolor="#FFFFFF" onkeydown="handleKey(event)"
+	onload="init()" onMouseDown="if(view != undefined) view.down(event);"
+	onTouchMove="if(view != undefined) view.move(event); "
+	onTouchEnd="if(view != undefined)  view.touchup(event); "
+	onTouchStart="if(view != undefined)  view.touchdown(event); "
+	onMouseUp="if(view != undefined)  view.up(event);"
+	onMouseMove="if(view != undefined) view.move(event);">
+	<script type="text/javascript" src="js/eagle/globals.js"></script>
+	<script type="text/javascript" src="js/eagle/timer.js"></script>
+	<script type="text/javascript" src="js/eagle/tools.js"></script>
+	<script type="text/javascript" src="js/eagle/part.js"></script>
+	<script type="text/javascript" src="js/eagle/bone.js"></script>
+	<script type="text/javascript" src="js/eagle/thing.js"></script>
+	<script type="text/javascript" src="js/eagle/thingcontainer.js"></script>
+	<script type="text/javascript" src="js/eagle/ellipse.js"></script>
+	<script type="text/javascript" src="js/eagle/boundingcircle.js"></script>
+	<script type="text/javascript" src="js/eagle/triangle.js"></script>
+	<script type="text/javascript" src="js/eagle/line.js"></script>
+	<script type="text/javascript" src="js/eagle/rectangle.js"></script>
+	<script type="text/javascript" src="js/eagle/imagething.js"></script>
+	<script type="text/javascript" src="js/eagle/text.js"></script>
+	<script type="text/javascript" src="js/eagle/partanimation.js"></script>
+	<script type="text/javascript" src="js/eagle/compositeanimation.js"></script>
+	<script type="text/javascript" src="js/eagle/collisionhandler.js"></script>
+	<script type="text/javascript" src="js/eagle/coordinatetap.js"></script>
+	<script type="text/javascript" src="js/eagle/modell.js"></script>
+	<script type="text/javascript" src="js/eagle/view.js"></script>
+	<script type="text/javascript" src="js/hortonsgym.js"></script>
+	<script type="text/javascript" src="jquery/jquery.js"></script>
+	<script type="text/javascript">
+		var view;
+	</script>
+	<img id="bgimg" width="0px" height="0px" />
+
+	<div id="all">
+
+		<canvas id="canvas">
+		</canvas>
+
+	</div>
+
+	<script type="text/javascript">
+		var all = document.getElementById("all");
+		var imgi = 0;
+		var canvaswidth, canvasheight;
+		var canvas = document.getElementById("canvas");
+		var w, h, scale;
+		var phonegap = false;
+		var biz;
+		var imgs = Array();
+		var nimgs = 5;
+		var aimg = 0;
+		var server;
+
+		function nextImage() {
+			if (aimg< 0 || aimg>= nimgs)
+				aimg = 0;
+			document.getElementById("bgimg").setAttribute("src",
+					"imgs/image" + aimg + ".jpg");
+	//		setTimeout("nextImage()", 12000);
+			console.log("img: "+"imgs/image" + aimg + ".jpg");
+			aimg++;
+		}
+
+		function handleKey(event) {
+			if (event.keyCode == 189)
+				biz.zoomOut();
+			if (event.keyCode == 187)
+				biz.zoomIn();
+		}
+
+		noPhoneGapSetup = function() {
+			if (w == undefined)
+				setup();
+		}
+
+		setTimeout(noPhoneGapSetup, 400);
+
+		var deviceReady = function() {
+			setTimeout(setup, 200);
+		}
+		init = function() {
+			document.addEventListener("deviceready", deviceReady, true);
+		}
+
+		setup = function() {
+			w = window.innerWidth;
+			h = window.innerHeight;
+
+			canvaswidth = w;
+			canvasheight = h;
+		//	alert("cw: " + canvaswidth + " ch: " + canvasheight);
+
+			document.getElementById("bgimg").setAttribute("style",
+					"position:absolute; top:" + 0 + "px; left: " + 0 + "px;");
+			document.getElementById("bgimg").setAttribute("width", canvaswidth);
+			startMe();
+		}
+
+		sign = function(i) {
+			if (i < 0)
+				return -1;
+			if (i > 0)
+				return 1;
+			return 0;
+		}
+
+		startMe = function() {
+			zoomuser = -1;
+			server = ""
+			localStorage.server = server;
+
+			localStorage.maxBelts = 12;
+
+			localStorage.user = "Me";
+			localStorage.password = "n/a";
+
+			document.getElementById("bgimg").setAttribute("height",
+					canvasheight);
+
+			document.getElementById("canvas").setAttribute("style",
+					"position:absolute; top:" + 0 + "px; left: " + 0 + "px;");
+			document.getElementById("canvas")
+					.setAttribute("width", canvaswidth);
+			document.getElementById("canvas").setAttribute("height",
+					canvasheight);
+			MAXWIDGETS = localStorage.maxBelts;
+			if (MAXWIDGETS == undefined || MAXWIDGETS == null || MAXWIDGETS < 8) {
+				MAXWIDGETS = 12;
+				localStorage.maxBelts = MAXWIDGETS;
+			}
+			if (services == undefined) {
+				biz = new BizAndSportsModell();
+console.log("Modell created.");
+				view = new View(canvas, biz, 25);
+			} else {
+				view = services.getView();
+				services.getView().enabled = true;
+			}
+			nextImage();
+
+		}
+
+	</script>
+</html>

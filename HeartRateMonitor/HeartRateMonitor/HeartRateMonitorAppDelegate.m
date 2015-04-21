@@ -233,7 +233,7 @@
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
                                     initWithURL:[NSURL
-                                                 URLWithString:@"http://172.16.227.204:8081/data/publish"]];
+                                                 URLWithString:@"http://127.0.0.1:8081/data/publish"]];
     
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-type"];
@@ -252,7 +252,7 @@
     long id= [[NSDate date] timeIntervalSince1970] * 1000;
     
     // {'id':'1425293845135', 'location':'0,0', 'event_timestamp':'2015-3-2T10:57:25.122Z', 'deviceid':'Horton', 'user':'Horton', 'heartrate':'123'}
-    NSString *jsonString = [NSString stringWithFormat:@"{'id':'%ld', 'location':'0,0', 'event_timestamp':'%@', 'deviceid':'Horton', 'user':'Horton', 'heartrate':'%u'}", id, dateString, bpm];
+    NSString *jsonString = [NSString stringWithFormat:@"{'id':'%ld', 'location':'0,0', 'event_timestamp':'%@', 'deviceid':'Emil2', 'user':'Emil2', 'heartrate':'%u'}", id, dateString, bpm];
     bpm= 65;
     
     NSLog(@"Trying to post: %@", jsonString);

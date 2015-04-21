@@ -1,0 +1,566 @@
+{
+  "index": {
+    "default": "_all",
+    "pattern": "[logstash-]YYYY.MM.DD",
+    "interval": "none"
+  },
+  "services": {
+    "query": {
+      "ids": [
+        0
+      ],
+      "list": {
+        "0": {
+          "id": 0,
+          "pin": false,
+          "color": "#7EB26D",
+          "alias": "",
+          "query": "*",
+          "type": "lucene"
+        }
+      },
+      "idQueue": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "filter": {
+      "ids": [
+        0
+      ],
+      "list": {
+        "0": {
+          "from": "NOW/MINUTE-15MINUTE",
+          "to": "NOW/MINUTE%2B1MINUTE",
+          "field": "event_timestamp",
+          "type": "time",
+          "fromDateObj": "2014-12-22T11:05:09.520Z",
+          "toDateObj": "2014-12-22T11:20:09.521Z",
+          "mandate": "must",
+          "active": true,
+          "alias": "",
+          "id": 0
+        }
+      },
+      "idQueue": [
+        1,
+        2
+      ]
+    }
+  },
+  "title": "Dashboard for HortonsGym",
+  "style": "light",
+  "loader": {
+    "load_gist": true,
+    "save_default": true,
+    "save_elasticsearch": true,
+    "hide": false,
+    "save_temp_ttl": "30d",
+    "save_gist": true,
+    "load_local": true,
+    "load_elasticsearch_size": 20,
+    "load_elasticsearch": true,
+    "save_temp": true,
+    "save_temp_ttl_enable": true,
+    "save_local": true,
+    "dropdown_collections": false
+  },
+  "failover": false,
+  "panel_hints": true,
+  "solr": {
+    "global_params": "&df=message",
+    "core_list": [
+      "hr"
+    ],
+    "core_name": "hr",
+    "server": "http://172.16.227.204:8983/solr/"
+  },
+  "editable": true,
+  "rows": [
+    {
+      "title": "Overview",
+      "height": "50px",
+      "panels": [
+        {
+          "content": "Welcome to Banana for HortonsGym\n\nTo configure what panels appear in a specific row, click on the _Configure Row_  (cog icon) at the far left of the row.\n\nEach panel can be configured by clicking on _Configure_ (cog icon) near the top right of the panel (just to the left of the panel type). The span of the panel determines its width; each row has width 12, and each panel can take up all or part of this span.\n\nAfter reading these _text panels_ (which are useful for presenting information about a dashboard), you can delete them by clicking on the \"x\" towards the top right of the panel.",
+          "title": "Configure Dashboard",
+          "style": {},
+          "error": false,
+          "status": "Stable",
+          "loadingEditor": false,
+          "type": "text",
+          "editable": true,
+          "mode": "markdown",
+          "span": 6
+        },
+        {
+          "content": "In the row below, we have put in a _time picker_ and a _search bar._ Banana is primarily designed for time series data, and we expect every dashboard to have a time picker. You will also almost always have a search bar for user searches. \n\nBelow that there is a hidden row that contains a _filtering_ module, which is used to configure global filter queries. You will almost certainly want to have one. Clicking on any facet in the terms module will filter results by that value. You can modify each filter once it is created; you can change the value and/or choose between \"must\", \"must not\" and \"either.\"\n\nClick on the right-facing triangle to the far left of the row to _Expand Row_. You can click on the upward-facing triangle on any row in order to _Hide Row._",
+          "title": "Timestamps, Queries and Filters",
+          "style": {},
+          "error": false,
+          "status": "Stable",
+          "type": "text",
+          "group": [
+            "default"
+          ],
+          "editable": true,
+          "mode": "markdown",
+          "span": 6
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": false
+    },
+    {
+      "title": "Query and Time Window",
+      "height": "50px",
+      "panels": [
+        {
+          "title": "Time Window",
+          "timefield": "event_timestamp",
+          "timespan": "15m",
+          "error": "",
+          "status": "Stable",
+          "loadingEditor": false,
+          "filter_id": 0,
+          "spyable": true,
+          "type": "timepicker",
+          "refresh": {
+            "min": 3,
+            "interval": 30,
+            "enable": false
+          },
+          "timeformat": "",
+          "editable": true,
+          "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d",
+            "90d",
+            "1y",
+            "5y"
+          ],
+          "mode": "relative",
+          "span": 6
+        },
+        {
+          "history": [
+            "heartrate:*"
+          ],
+          "remember": 10,
+          "title": "Search",
+          "error": false,
+          "query": "heartrate:*",
+          "pinned": true,
+          "label": "Search",
+          "def_type": "",
+          "type": "query",
+          "group": [
+            "default"
+          ],
+          "spyable": true,
+          "editable": true,
+          "span": 6
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": false
+    },
+    {
+      "title": "Filters",
+      "height": "50px",
+      "panels": [
+        {
+          "error": false,
+          "type": "filtering",
+          "group": [
+            "default"
+          ],
+          "spyable": true,
+          "editable": true,
+          "span": 12
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": true
+    },
+    {
+      "title": "Facets, Histogram and Table",
+      "height": "150px",
+      "panels": [
+        {
+          "content": "",
+          "title": "Facets, Histogram and Table",
+          "style": {},
+          "error": false,
+          "status": "Stable",
+          "type": "text",
+          "group": [
+            "default"
+          ],
+          "editable": true,
+          "mode": "markdown",
+          "span": 12
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": "true"
+    },
+    {
+      "title": "Heartrates",
+      "height": "350px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 12,
+          "editable": true,
+          "type": "histogram",
+          "loadingEditor": false,
+          "mode": "values",
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ],
+            "query": "q=*&df=message&wt=json&rows=100000&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&fl=event_timestamp heartrate&group=true&group.field=user&group.limit=100000",
+            "custom": ""
+          },
+          "max_rows": 100000,
+          "value_field": "heartrate",
+          "group_field": "user",
+          "auto_int": true,
+          "resolution": 100,
+          "interval": "10s",
+          "intervals": [
+            "auto",
+            "1s",
+            "1m",
+            "5m",
+            "10m",
+            "30m",
+            "1h",
+            "3h",
+            "12h",
+            "1d",
+            "1w",
+            "1M",
+            "1y"
+          ],
+          "fill": 0,
+          "linewidth": 2,
+          "timezone": "browser",
+          "spyable": true,
+          "zoomlinks": true,
+          "bars": false,
+          "stack": false,
+          "points": false,
+          "lines": true,
+          "lines_smooth": true,
+          "legend": true,
+          "x-axis": true,
+          "y-axis": true,
+          "percentage": false,
+          "interactive": true,
+          "options": true,
+          "tooltip": {
+            "value_type": "individual",
+            "query_as_alias": false
+          },
+          "title": "Heartrates per User"
+        }
+      ]
+    },
+    {
+      "title": "More",
+      "height": "300px",
+      "panels": [
+        {
+          "col_field": "heartrate",
+          "editor_size": 300,
+          "error": false,
+          "row_field": "deviceid",
+          "loadingEditor": false,
+          "transposed": false,
+          "spyable": true,
+          "type": "heatmap",
+          "editable": true,
+          "size": 0,
+          "row_size": 300,
+          "title": "Heatmap",
+          "color": "red",
+          "transpose_show": true,
+          "queries": {
+            "query": "q=*&df=message&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&wt=json&rows=0&facet=true&facet.pivot=deviceid,heartrate&facet.limit=300&facet.pivot.mincount=0",
+            "ids": [
+              0
+            ],
+            "custom": "",
+            "mode": "all"
+          },
+          "span": 6
+        },
+        {
+          "error": false,
+          "loadingEditor": false,
+          "type": "bettermap",
+          "spyable": true,
+          "editable": true,
+          "lat_start": "",
+          "size": 1000,
+          "field": "location",
+          "title": "Locations",
+          "lon_start": "",
+          "queries": {
+            "query": "q=*&df=message&wt=json&rows=1000&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&sort=event_timestamp desc",
+            "ids": [
+              0
+            ],
+            "custom": "",
+            "mode": "all"
+          },
+          "lat_end": "",
+          "lon_end": "",
+          "tooltip": "heartrate",
+          "span": 6
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": false
+    },
+    {
+      "title": "Graph",
+      "height": "250px",
+      "panels": [
+        {
+          "interval": "10s",
+          "loadingEditor": false,
+          "resolution": 100,
+          "type": "histogram",
+          "spyable": true,
+          "mode": "count",
+          "title": "Event Counts",
+          "timezone": "browser",
+          "y-axis": true,
+          "interactive": true,
+          "points": false,
+          "options": true,
+          "percentage": false,
+          "fill": 0,
+          "bars": true,
+          "value_field": null,
+          "intervals": [
+            "auto",
+            "1s",
+            "1m",
+            "5m",
+            "10m",
+            "30m",
+            "1h",
+            "3h",
+            "12h",
+            "1d",
+            "1w",
+            "1M",
+            "1y"
+          ],
+          "max_rows": 100000,
+          "editable": true,
+          "zoomlinks": true,
+          "group_field": null,
+          "linewidth": 3,
+          "x-axis": true,
+          "legend": true,
+          "queries": {
+            "query": "q=*&df=message&wt=json&rows=0&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&facet=true&facet.range=event_timestamp&facet.range.start=NOW/MINUTE-15MINUTE&facet.range.end=NOW/MINUTE%2B1MINUTE&facet.range.gap=%2B10SECOND",
+            "ids": [
+              0
+            ],
+            "custom": "",
+            "mode": "all"
+          },
+          "lines": false,
+          "stack": true,
+          "auto_int": true,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": false
+          },
+          "span": 6,
+          "lines_smooth": false
+        },
+        {
+          "other": false,
+          "error": false,
+          "tilt": true,
+          "labels": false,
+          "donut": true,
+          "exclude": [],
+          "spyable": true,
+          "type": "terms",
+          "editable": true,
+          "size": 100,
+          "field": "user",
+          "missing": false,
+          "title": "User",
+          "arrangement": "horizontal",
+          "style": {
+            "font-size": "10pt"
+          },
+          "order": "count",
+          "chart": "pie",
+          "queries": {
+            "query": "q=*&df=message&wt=json&rows=0&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&facet=true&facet.field=user&facet.limit=100",
+            "ids": [
+              0
+            ],
+            "mode": "all"
+          },
+          "counter_pos": "none",
+          "group": [
+            "default"
+          ],
+          "time_field": "event_timestamp",
+          "span": 6,
+          "mode": "count",
+          "stats_field": "",
+          "decimal_points": 0,
+          "lastColor": "",
+          "chartColors": [
+            "#7EB26D",
+            "#EAB839",
+            "#6ED0E0",
+            "#EF843C",
+            "#E24D42",
+            "#1F78C1",
+            "#BA43A9",
+            "#705DA0",
+            "#508642",
+            "#CCA300",
+            "#447EBC",
+            "#C15C17",
+            "#890F02",
+            "#0A437C",
+            "#6D1F62",
+            "#584477",
+            "#B7DBAB",
+            "#F4D598",
+            "#70DBED",
+            "#F9BA8F",
+            "#F29191",
+            "#82B5D8",
+            "#E5A8E2",
+            "#AEA2E0",
+            "#629E51",
+            "#E5AC0E",
+            "#64B0C8",
+            "#E0752D",
+            "#BF1B00",
+            "#0A50A1",
+            "#962D82",
+            "#614D93",
+            "#9AC48A",
+            "#F2C96D",
+            "#65C5DB",
+            "#F9934E",
+            "#EA6460",
+            "#5195CE",
+            "#D683CE",
+            "#806EB7",
+            "#3F6833",
+            "#967302",
+            "#2F575E",
+            "#99440A",
+            "#58140C",
+            "#052B51",
+            "#511749",
+            "#3F2B5B",
+            "#E0F9D7",
+            "#FCEACA",
+            "#CFFAFF",
+            "#F9E2D2",
+            "#FCE2DE",
+            "#BADFF4",
+            "#F9D9F9",
+            "#DEDAF7"
+          ]
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": false
+    },
+    {
+      "title": "Events",
+      "height": "650px",
+      "panels": [
+        {
+          "trimFactor": 300,
+          "sort": [
+            "id",
+            "desc"
+          ],
+          "error": false,
+          "status": "Stable",
+          "sortable": true,
+          "pages": 5,
+          "spyable": true,
+          "highlight": [],
+          "type": "table",
+          "header": true,
+          "editable": true,
+          "size": 100,
+          "title": "Events",
+          "style": {
+            "font-size": "9pt"
+          },
+          "field_list": true,
+          "normTimes": true,
+          "overflow": "min-height",
+          "queries": {
+            "query": "q=*&df=message&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&sort=id desc&wt=json&rows=500",
+            "ids": [
+              0
+            ],
+            "mode": "all",
+            "basic_query": "q=*&df=message&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&sort=id desc"
+          },
+          "group": [
+            "default"
+          ],
+          "offset": 0,
+          "time_field": "event_timestamp",
+          "paging": true,
+          "span": 12,
+          "fields": [
+            "heartrate"
+          ],
+          "saveOption": "json",
+          "exportSize": 500,
+          "exportAll": true,
+          "displayLinkIcon": true,
+          "imageFields": [],
+          "imgFieldWidth": "auto",
+          "imgFieldHeight": "85px"
+        }
+      ],
+      "collapsable": true,
+      "editable": true,
+      "collapse": false
+    }
+  ]
+}

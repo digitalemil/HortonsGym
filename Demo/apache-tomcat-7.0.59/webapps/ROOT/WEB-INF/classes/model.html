@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Hortonworks HDP Demo</title>
+
+</head>
+<body bgcolor="#FFFFFF">
+	<div id="alldiv">
+		<div>
+			<img id="bg" style="position: absolute; top: 0px; left: 0px;"
+				src="../bg.jpg"> </img>
+		</div>
+		<div id="text">
+		<h2><center>Horton's Gym Secret Sauce</center></h2></br>
+		<center>
+		<p>
+					Current PMML:<br>
+					<textarea name="pmml" id="pmml" cols="80" rows="25">
+PMMLCONTENT
+					</textarea>
+					</br>
+					<input type="button" name="Upload" value="Upload"
+						onclick="postPMML(document.getElementById('pmml').value); alert(document.getElementById('pmml').value)"> <input type="button"
+						name="Reload" value="Reload" onclick="location.reload()">
+				</p></center>
+		</div>
+	</div>
+	<script>
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+		var sX = w / 1024;
+		var sY = h / 768;
+		var bgh = (768 * window.innerWidth / 1024);
+		var pmml;
+
+		var bg = document.getElementById("bg");
+		bg.setAttribute("style",
+				"position:absolute; top:0px; left:0px; width: "
+						+ window.innerWidth + "px; height: " + bgh + "px;");
+		var text = document.getElementById("text");
+		text.setAttribute("style", "position:absolute; top:" + (140* sY)
+				+ "px; left:" + (((960 - 512 - 140) / 2) * sX) + "px; width: "
+				+ (384 * sX * 1.5) + "px; height: " + (128 * sY * 1.5) + "px;");
+
+
+	function pmmlSent() {
+			console.log("PMML sent: "+pmml);
+	}
+
+	function postPMML(pmml) {
+
+			
+			if (window.XMLHttpRequest) {
+				try {
+					req = new XMLHttpRequest();
+				} catch (e) {
+					req = false;
+				}
+				// branch for IE/Windows ActiveX version
+			} else {
+				if (window.ActiveXObject) {
+					try {
+						req = new ActiveXObject("Msxml2.XMLHTTP");
+					} catch (e) {
+						try {
+							req = new ActiveXObject("Microsoft.XMLHTTP");
+						} catch (e) {
+							req = false;
+						}
+					}
+				}
+			}
+			if (req) {
+				req.onreadystatechange = pmmlSent;
+				req.open("POST", "update", true);
+				req.send(pmml);
+				req.setRequestHeader("Content-type", "application/xml");			
+			} else {
+				alert("Could not update model!");
+			}
+		}
+
+	</script>
+
+</body>
+</html>
