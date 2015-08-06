@@ -19,7 +19,7 @@
 		</init-param>
 		<init-param>
 			<param-name>solrurl</param-name>
-<param-value>http://127.0.0.1:8983/solr/hr</param-value>
+<param-value>http://sandbox:8983/solr/hr</param-value>
 		</init-param>
 		<init-param>
 			<param-name>pivotfield</param-name>
@@ -91,6 +91,24 @@
  <servlet-mapping>
                 <servlet-name>HortonsGym</servlet-name>
                 <url-pattern>/data/upload</url-pattern>
+        </servlet-mapping>
+<servlet>
+                <description></description>
+                <display-name>HortonsGymModel</display-name>
+                <servlet-name>Model</servlet-name>
+                <servlet-class>com.hortonworks.digitalemil.hortonsgym.ModelUpdater</servlet-class>
+                <init-param>
+                        <param-name>zookeeper</param-name>
+                        <param-value>sandbox:2181</param-value>
+                </init-param>
+        </servlet>
+        <servlet-mapping>
+                <servlet-name>Model</servlet-name>
+                <url-pattern>/model/view</url-pattern>
+        </servlet-mapping>
+       <servlet-mapping>
+                <servlet-name>Model</servlet-name>
+                <url-pattern>/model/update</url-pattern>
         </servlet-mapping>
 </web-app>
 

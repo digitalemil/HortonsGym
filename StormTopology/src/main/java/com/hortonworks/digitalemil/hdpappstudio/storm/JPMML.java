@@ -1,9 +1,19 @@
 package com.hortonworks.digitalemil.hdpappstudio.storm;
 
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +31,7 @@ import org.dmg.pmml.Target;
 import org.dmg.pmml.TreeModel;
 import org.jpmml.evaluator.*;
 import org.jpmml.manager.*;
+import org.json.JSONObject;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -38,13 +49,15 @@ import org.apache.zookeeper.Watcher.Event;
 public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 	private static final long serialVersionUID = 1L;
 
-	String modelString, zk = "127.0.0.1:2181";
-	String znode = "/hortonsgym/pmml";
+	static String modelString, zk = "127.0.0.1:2181";
+	static String znode = "/hortonsgym/pmml";
 
-	PMML pmml;
-	ModelEvaluator modelEvaluator;
-	ZooKeeper zookeeper;
-
+	static PMML pmml;
+	static ModelEvaluator modelEvaluator;
+	static ZooKeeper zookeeper;
+	static String lastloc= "";
+	static long lastdate= 0;
+	
 	Map<FieldName, FieldValue> arguments = new LinkedHashMap<FieldName, FieldValue>();
 
 	private OutputCollector collector;
@@ -62,6 +75,8 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 	}
 
 	public void init() {
+		if (modelEvaluator != null)
+			return;
 		try {
 			modelString = new String(zookeeper.getData(znode, false, null))
 					.trim();
@@ -97,19 +112,25 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 		if (modelString == null || modelString.length() <= 0)
 			return "0x80FFFFFF";
 
-		List<FieldName> activeFields = modelEvaluator.getActiveFields();
-		for (FieldName activeField : activeFields) {
-			FieldValue activeValue = modelEvaluator.prepare(activeField, hr);
-			arguments.put(activeField, activeValue);
+		try {
+			List<FieldName> activeFields = modelEvaluator.getActiveFields();
+			for (FieldName activeField : activeFields) {
+				FieldValue activeValue = modelEvaluator
+						.prepare(activeField, hr);
+				arguments.put(activeField, activeValue);
+			}
+
+			Map<FieldName, ?> results = modelEvaluator.evaluate(arguments);
+
+			FieldName targetName = modelEvaluator.getTargetField();
+			Object targetValue = results.get(targetName);
+
+			NodeClassificationMap nodeMap = (NodeClassificationMap) targetValue;
+			return nodeMap.getResult();
+		} catch (Exception e) {
+			System.out.println("Could not evaulate model. Skipping.");
+			return null;
 		}
-		
-		Map<FieldName, ?> results = modelEvaluator.evaluate(arguments);
-
-		FieldName targetName = modelEvaluator.getTargetField();
-		Object targetValue = results.get(targetName);
-
-		NodeClassificationMap nodeMap = (NodeClassificationMap) targetValue;
-
 		/*
 		 * System.out.println("Value for HR: "+hr);
 		 * System.out.println("Probability (Red): " +
@@ -118,9 +139,70 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 		 * nodeMap.getProbability("0x8000FF00")); System.out.println("Result: "
 		 * + nodeMap.getResult());
 		 */
-		return nodeMap.getResult();
+		
 	}
 
+	private boolean post(String serverUrl, String json) {
+		URL url = null;
+		try {
+			url = new URL(serverUrl);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		HttpURLConnection connection = null;
+		try {
+			connection = (HttpURLConnection) url.openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		connection.setDoOutput(true);
+		connection.setDoInput(true);
+		connection.setInstanceFollowRedirects(false);
+		try {
+			connection.setRequestMethod("POST");
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		}
+		connection.setRequestProperty("Content-Type", "application/json");
+		connection.setRequestProperty("charset", "utf-8");
+		connection.setRequestProperty("Content-Length",
+				"" + Integer.toString(json.getBytes().length));
+		connection.setUseCaches(false);
+
+		try {
+			DataOutputStream wr = new DataOutputStream(
+					connection.getOutputStream());
+			wr.writeBytes(json);
+			wr.flush();
+			wr.close();
+			DataInputStream r = new DataInputStream(connection.getInputStream());
+			String line = null;
+			do {
+				line = r.readLine();
+				if (line != null)
+					System.out.println(line);
+			} while (line != null);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		try {
+			System.out.println("ResponseCode: "+connection.getResponseCode());
+			if (connection.getResponseCode() != 200) {
+				connection.disconnect();
+				return false;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		connection.disconnect();
+		return true;
+	}
+	
 	public void execute(Tuple tuple) {
 		String hr = tuple.getString(4);
 
@@ -130,9 +212,56 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 		String user = tuple.getString(5);
 		collector.emit(tuple, new Values(user, user + ":" + color));
 		collector.ack(tuple);
+		/*
+		String hr = tuple.getString(4);
+		String loc= tuple.getString(1).substring(0,2);
+		String date= tuple.getString(2);
+		
+		DateFormat dfmt = new SimpleDateFormat( "yyyy-M-d'T'H:m:s'Z'" );
+		Date d= null, dl= null;
+		try {
+			d = dfmt.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		long thisdate= d.getTime();
+		long delta= thisdate- lastdate;
+		boolean dateok= delta>(60*1000);
+				
+		String color = getColor(Double.parseDouble(hr));
+		System.out.println("C before: "+color+" "+loc+" "+lastloc);
+		JSONObject json= new JSONObject();
+		
+		for(int i= 0; i< tuple.size(); i++) {
+			json.put(tuple.getFields().get(i), tuple.getString(i));
+		}
+		if(!loc.equals(lastloc) && lastloc.length()> 0 &&!dateok) {
+			
+			json.put("fraud", 1);
+			post("http://hortonsgym01.cloud.hortonworks.com:8983/solr/tx/update/json?commit=true", "["+json.toString()+"]");
+			
+			color= "0x80FF0000";
+		}
+		else {
+			json.put("fraud", 0);
+			post("http://hortonsgym01.cloud.hortonworks.com:8983/solr/tx/update/json?commit=true", "["+json.toString()+"]");
+			color= "0x8000FF00";
+			lastloc= loc;
+			lastdate= thisdate;
+		}
+		
+		System.out.println("C after: "+color);
+		System.out.println("JPMML-Bolt " + hr + "=> color: " + color);
+
+		String user = tuple.getString(5);
+		collector.emit(tuple, new Values(user, user + ":" + color));
+		collector.ack(tuple);
+		*/
 	}
 
 	private void initZK(String zk) {
+		if (zookeeper != null && !dead)
+			return;
 		try {
 			zookeeper = new ZooKeeper(zk, 3000, this);
 			zookeeper.exists(znode, this);
@@ -178,7 +307,7 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 		}
 		try {
 			modelString = new String(zookeeper.getData(znode, false, null))
-			.trim();
+					.trim();
 			createModelEvaluator(modelString);
 		} catch (Exception e1) {
 			e1.printStackTrace();

@@ -126,7 +126,7 @@ public class Topology {
 
 		// Instantiate the HdfsBolt
 		HdfsBolt hdfsbolt = new HdfsBolt()
-		         .withFsUrl("hdfs://sandbox.hortonworks.com:8020")
+		         .withFsUrl("hdfs://sandbox:8020")
 		         .withFileNameFormat(fileNameFormat)
 		         .withRecordFormat(format)
 		         .withRotationPolicy(rotationPolicy)
@@ -137,7 +137,7 @@ public class Topology {
 		fileNameFormat = new DefaultFileNameFormat().withPath("/user/guest/hdpappstudio/raw/"+hivetable);
 		HdfsBolt rawBolt=
 				new HdfsBolt()
-        .withFsUrl("hdfs://sandbox.hortonworks.com:8020")
+        .withFsUrl("hdfs://sandbox:8020")
         .withFileNameFormat(fileNameFormat)
         .withRecordFormat(format)
         .withRotationPolicy(rotationPolicy)

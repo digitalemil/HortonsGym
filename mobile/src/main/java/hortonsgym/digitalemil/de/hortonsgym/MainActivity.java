@@ -169,8 +169,8 @@
                 mGoogleApiClient.connect();
                 load();
                 loadData();
-                Thread t= new Thread(new HRSimulator());
-                t.start();
+            //    Thread t= new Thread(new HRSimulator());
+            //    t.start();
             }
 
             public void loadData() {

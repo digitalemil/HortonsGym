@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HDP Demo Studio</title>
+
+    <script src="datetimepicker_css.js"></script>
+<script>
+	function createQuery() {
+		var fr= document.getElementById("from").value;
+		fr= fr.replace(" ", "T");
+		fr= fr+"Z";
+		var to= document.getElementById("to").value;
+	 	 to= to.replace(" ", "T");
+                to= to+"Z";
+	
+	
+return "q= event_timestamp:{"+fr+" TO "+to+"}" ;
+}
+
+	function initialize() {
+		var id = document.getElementById("all");
+		w = window.innerWidth;
+		h = window.innerHeight;
+		var perfcor = 0;
+		scale = Math.min(w / 1024, h / 640);
+		sX = w / 1024;
+		sY = h / 768;
+
+		var bgimg = new Image();
+		bgimg.src = "bg.jpg";
+		bgimg.setAttribute("id", "bg");
+		id.appendChild(bgimg);
+
+		var bgh = (768 * window.innerWidth / 1024);
+		bgimg.setAttribute("style",
+				"position:absolute; top:0px; left:0px; width: "
+						+ window.innerWidth + "px; height: " + bgh + "px;");
+id = document.getElementById("fromto");
+		id
+				.setAttribute(
+						"style",
+						"position:absolute; top:"
+								+ (32
+										* sY
+										+ ((128 * window.innerWidth / 1024) + 32 * sY) + (128* sY * 0.6))
+								+ "px; left:" + (512 * (1 - 0.7) * sX)
+								+ "px; width: " + (1024 * sX * 0.7)
+								+ "px; height: " + (768 * sY * 0.6) + "px;");
+}
+</script>
+</head>
+<body onload="initialize()">
+	<div id="all" style="position: absolute; top: 0px; left: 0px;"></div>
+<div id="fromto" style="text-align:center; margin:150px auto 100px auto;">
+	<h3>Animate Locations:</h3>
+        <label for="from">From:</label>
+        <input type="Text" id="from" maxlength="25" size="25"/>
+        <img src="images2/cal.gif" onclick="javascript:NewCssCal ('from','yyyyMMdd','dropdown',true,'24',true)" style="cursor:pointer"/>
+
+        <label for="to">To:</label>
+        <input type="Text" id="to" maxlength="25" size="25"/>
+        <img src="images2/cal.gif" onclick="javascript:NewCssCal ('to','yyyyMMdd','dropdown',true,'24',true)" style="cursor:pointer"/>
+<input type="button" value="Animate" id="Animate"
+					onclick="alert(createQuery())"/>
+
+    </div>
+</body>
+</html>
+</head>
+

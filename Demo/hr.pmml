@@ -28,12 +28,12 @@
 <ScoreDistribution value="0x80FF0000" recordCount="19" confidence="0.791666666666667"/>
 <ScoreDistribution value="0x8000FF00" recordCount="5" confidence="0.208333333333333"/>
 <Node id="2" score="0x80FF0000" recordCount="17">
-<SimplePredicate field="HR" operator="greaterOrEqual" value="95.0"/>
+<SimplePredicate field="HR" operator="greaterOrEqual" value="89.0"/>
 <ScoreDistribution value="0x80FF0000" recordCount="17" confidence="1"/>
 <ScoreDistribution value="0x8000FF00" recordCount="0" confidence="0"/>
 </Node>
 <Node id="3" score="0x8000FF00" recordCount="7">
-<SimplePredicate field="HR" operator="lessThan" value="95.0"/>
+<SimplePredicate field="HR" operator="lessThan" value="89.0"/>
 <ScoreDistribution value="0x80FF0000" recordCount="2" confidence="0.285714285714286"/>
 <ScoreDistribution value="0x8000FF00" recordCount="5" confidence="0.714285714285714"/>
 </Node>
