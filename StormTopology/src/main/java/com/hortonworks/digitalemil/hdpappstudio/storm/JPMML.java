@@ -68,7 +68,7 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 	}
 
 	public static void main(String... args) {
-		JPMML jpmml = new JPMML("127.0.0.1:2181");
+		JPMML jpmml = new JPMML("sandbox:2181");
 		jpmml.init();
 		jpmml.getColor(65.0);
 		jpmml.getColor(140.0);
@@ -295,12 +295,20 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 	}
 
 	public void process(WatchedEvent event) {
+		boolean updated= false;
 		System.out.println("Zookeeper Event: " + event);
 		if (event.getType() == Event.EventType.None) {
 			switch (event.getState()) {
 			case Disconnected:
 			case Expired:
 				closing(KeeperException.Code.SessionExpired);
+				try {
+					zookeeper.close();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				dead= true;
 				initZK(zk);
 				break;
 			}
@@ -309,6 +317,8 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 			modelString = new String(zookeeper.getData(znode, false, null))
 					.trim();
 			createModelEvaluator(modelString);
+	//		updated= true;
+			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -320,6 +330,17 @@ public class JPMML extends BaseRichBolt implements Watcher, Runnable {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if(updated) {
+		try {
+			zookeeper.close();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		dead= true;
+		initZK(zk);
 		}
 	}
 
