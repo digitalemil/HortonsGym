@@ -236,12 +236,12 @@
             "ids": [
               0
             ],
-            "query": "q=*&df=message&wt=json&rows=100000&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&fl=event_timestamp heartrate&group=true&group.field=user&group.limit=100000",
+            "query": "q=*&df=message&wt=json&rows=100000&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&fl=event_timestamp heartrate&group=true&group.field=username&group.limit=100000",
             "custom": ""
           },
           "max_rows": 100000,
           "value_field": "heartrate",
-          "group_field": "user",
+          "group_field": "username",
           "auto_int": true,
           "resolution": 100,
           "interval": "10s",
@@ -414,7 +414,7 @@
           "type": "terms",
           "editable": true,
           "size": 100,
-          "field": "user",
+          "field": "username",
           "missing": false,
           "title": "User",
           "arrangement": "horizontal",
@@ -424,7 +424,7 @@
           "order": "count",
           "chart": "pie",
           "queries": {
-            "query": "q=*&df=message&wt=json&rows=0&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&facet=true&facet.field=user&facet.limit=100",
+            "query": "q=*&df=message&wt=json&rows=0&fq=event_timestamp:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&facet=true&facet.field=username&facet.limit=100",
             "ids": [
               0
             ],
